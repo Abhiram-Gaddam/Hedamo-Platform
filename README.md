@@ -76,8 +76,9 @@ Real-time analytics: average score, flagged products, category distribution, ris
 
 ## Get Started
 
-git clone https://github.com/Abhiram-Gaddam/Hedamo-Platform.git
-cd  Hedamo-Platform
-npm install
-npm run dev
+* git clone https://github.com/Abhiram-Gaddam/Hedamo-Platform.git
+* cd  Hedamo-Platform
+* npm install
+* npm run dev
+
  
