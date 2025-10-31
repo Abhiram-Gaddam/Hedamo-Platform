@@ -1,7 +1,7 @@
  
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import ProductView from '../components/ProductView'; 
+import ProductView from '../Components/ProductView'; 
 import useSmoothEnter from "../hooks/useSmoothTransition";
 
 export default function Dashboard() {

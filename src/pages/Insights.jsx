@@ -11,7 +11,7 @@ import {
   Target
 } from 'lucide-react';
 import { useProductStore } from '../store/productStore';
-import RadialChart from '../components/RadialChart';
+import RadialChart from '../Components/RadialChart';
 
 export default function Insights() {
   const { products } = useProductStore();

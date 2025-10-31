@@ -1,4 +1,4 @@
-import StepForm from '../components/StepForm';
+import StepForm from '../Components/StepForm';
 
 export default function AddProduct() {
   return (

@@ -2,9 +2,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ArrowLeft } from 'lucide-react';
-import RadialChart from '../components/RadialChart';
-import SuggestionsList from '../components/SuggestionsList';
-import FlagsDisplay from '../components/FlagsDisplay';
+import RadialChart from '../Components/RadialChart';
+import SuggestionsList from '../Components/SuggestionsList';
+import FlagsDisplay from '../Components/FlagsDisplay';
 import { useProductStore } from '../store/productStore';
 
 export default function ProductDetailsPage() {
