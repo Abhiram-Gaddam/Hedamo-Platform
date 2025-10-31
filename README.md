@@ -22,10 +22,11 @@ Live Demo: [https://hedamo.vercel.app](https://hedamo.vercel.app)
 
 ## Pages Overview
 
-### Dashboard  
+### Dashboard 
+
 Main landing page with **live product cards**, **global search**, and **view toggle (Grid/List)**.
 
-![Dashboard](https://via.placeholder.com/1200x800/2563EB/ffffff?text=Dashboard+Page)
+ <img width="1279" height="649" alt="Screen Shot 2025-10-31 at 7 58 25 PM" src="https://github.com/user-attachments/assets/bf0b4de3-262b-40fc-9658-aa8775816679" />
 
 ---
 
@@ -33,34 +34,39 @@ Main landing page with **live product cards**, **global search**, and **view tog
 Multi-step form with validation and dynamic fields.
 
 1. **Basic Information**  
-   Name, category, description  
-   ![Step 1](https://via.placeholder.com/1200x800/38BDF8/ffffff?text=Step+1:+Basic+Info)
+   Name, category, description
+    <img width="1274" height="687" alt="Screen Shot 2025-10-31 at 8 05 58 PM" src="https://github.com/user-attachments/assets/0d79369d-37bc-44f0-9a56-0d01794cd7de" />
 
-2. **Ingredients**  
-   Add multiple ingredients  
-   ![Step 2](https://via.placeholder.com/1200x800/06B6D4/ffffff?text=Step+2:+Ingredients)
+    
+3. **Ingredients**  
+   Add multiple ingredients
+    <img width="1275" height="641" alt="Screen Shot 2025-10-31 at 8 06 29 PM" src="https://github.com/user-attachments/assets/a48be2ae-dbbc-43cc-8528-eb44ecb7015f" />
 
-3. **Certifications**  
+   
+5. **Certifications**  
    List certifications  
-   ![Step 3](https://via.placeholder.com/1200x800/0EA5E9/ffffff?text=Step+3:+Certifications)
+   <img width="1279" height="645" alt="Screen Shot 2025-10-31 at 8 01 19 PM" src="https://github.com/user-attachments/assets/960fb9e1-dc17-484c-9d79-26bd3dfc7f78" />
 
-4. **Review & Submit**  
+   
+6. **Review & Submit**  
    Final review → **AI analysis result screen** with score, explanation, and suggestions  
-   ![AI Result](https://via.placeholder.com/1200x800/10B981/ffffff?text=AI+Analysis+Complete%21)
-
+   <img width="1279" height="650" alt="Screen Shot 2025-10-31 at 8 01 54 PM" src="https://github.com/user-attachments/assets/08c44d32-c321-46c1-9e97-6baabe5f8a29" />
+  
+  
 ---
 
 ### Product Detail  
 Full AI breakdown: score, flags, suggestions, sourcing info.
+ <img width="1269" height="633" alt="Screen Shot 2025-10-31 at 8 03 52 PM" src="https://github.com/user-attachments/assets/b47289af-109f-4d98-a3dc-107db3e6300b" />
 
-![Product Detail](https://via.placeholder.com/1200x800/8B5CF6/ffffff?text=Product+Detail+Page)
 
 ---
 
 ### Insights  
 Real-time analytics: average score, flagged products, category distribution, risk/opportunity alerts.
 
-![Insights](https://via.placeholder.com/1200x800/F59E0B/ffffff?text=Insights+Dashboard)
+ <img width="1067" height="553" alt="Screen Shot 2025-10-31 at 8 04 50 PM" src="https://github.com/user-attachments/assets/ef8fd181-a48e-4cf1-8390-a9276ec675bf" />
+
 
 ---
 
