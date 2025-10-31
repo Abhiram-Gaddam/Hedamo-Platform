@@ -1,0 +1,155 @@
+[
+  {
+    "id": 1,
+    "productName": "Organic Herbal Tea",
+    "category": "Beverages",
+    "score": 72,
+    "status": "Reviewed",
+    "aiResponse": {
+      "explanation": "Moderate transparency. Missing sourcing details for 2 ingredients.",
+      "suggestions": [
+        "Add sourcing details for green tea leaves.",
+        "Include certification ID for 'organic' claim.",
+        "Clarify packaging recyclability."
+      ],
+      "flags": ["Incomplete sourcing", "Unverified organic claim"]
+    }
+  },
+  {
+    "id": 2,
+    "productName": "EcoFresh Dish Soap",
+    "category": "Home Care",
+    "score": 65,
+    "status": "Reviewed",
+    "aiResponse": {
+      "explanation": "Transparency is average. The origin of essential oils and surfactants is unclear.",
+      "suggestions": [
+        "Specify the plant source of surfactants.",
+        "Provide certificate for biodegradable ingredients.",
+        "Add manufacturing location details."
+      ],
+      "flags": ["Unclear ingredient origin", "Missing biodegradability proof"]
+    }
+  },
+  {
+    "id": 3,
+    "productName": "PureGlow Face Serum",
+    "category": "Personal Care",
+    "score": 88,
+    "status": "Reviewed",
+    "aiResponse": {
+      "explanation": "High transparency. Most ingredients are verified with proper certifications.",
+      "suggestions": [
+        "Include expiry date range on packaging.",
+        "Mention lab testing authority."
+      ],
+      "flags": ["Missing testing reference"]
+    }
+  },
+  {
+    "id": 4,
+    "productName": "FarmRoot Almond Milk",
+    "category": "Beverages",
+    "score": 74,
+    "status": "Reviewed",
+    "aiResponse": {
+      "explanation": "Good transparency. However, sustainability details for almonds are not provided.",
+      "suggestions": [
+        "Add information about almond sourcing farms.",
+        "Clarify carbon footprint data."
+      ],
+      "flags": ["Missing sustainability data"]
+    }
+  },
+  {
+    "id": 5,
+    "productName": "GreenBite Protein Bar",
+    "category": "Snacks",
+    "score": 58,
+    "status": "Reviewed",
+    "aiResponse": {
+      "explanation": "Limited transparency. Some ingredients lack sourcing or allergen details.",
+      "suggestions": [
+        "List allergen warnings clearly.",
+        "Disclose country of origin for soy protein.",
+        "Add nutritional verification document."
+      ],
+      "flags": ["Unverified ingredients", "Missing allergen information"]
+    }
+  },
+  {
+    "id": 6,
+    "productName": "AquaPure Water Bottle",
+    "category": "Beverages",
+    "score": 90,
+    "status": "Reviewed",
+    "aiResponse": {
+      "explanation": "Excellent transparency. All data verified except for packaging sustainability metrics.",
+      "suggestions": [
+        "Include recycling rate for plastic material.",
+        "Add QR code for factory audit report."
+      ],
+      "flags": ["Incomplete packaging data"]
+    }
+  },
+  {
+    "id": 7,
+    "productName": "NatureBlend Shampoo",
+    "category": "Personal Care",
+    "score": 69,
+    "status": "Reviewed",
+    "aiResponse": {
+      "explanation": "Moderate transparency. Ingredient origins are mentioned, but certifications are missing.",
+      "suggestions": [
+        "Provide organic certification reference.",
+        "Add cruelty-free proof document."
+      ],
+      "flags": ["Missing certification", "No cruelty-free label"]
+    }
+  },
+  {
+    "id": 8,
+    "productName": "VitaBoost Multivitamins",
+    "category": "Health",
+    "score": 81,
+    "status": "Reviewed",
+    "aiResponse": {
+      "explanation": "Good transparency. Verified sources, but no clear evidence of quality testing.",
+      "suggestions": [
+        "Include 3rd-party lab verification report.",
+        "Add expiration date visibility on label."
+      ],
+      "flags": ["Missing lab test data"]
+    }
+  },
+  {
+    "id": 9,
+    "productName": "SunKraft Cooking Oil",
+    "category": "Grocery",
+    "score": 63,
+    "status": "Reviewed",
+    "aiResponse": {
+      "explanation": "Average transparency. Brand has basic information, but refining process not described.",
+      "suggestions": [
+        "Describe oil extraction and refining method.",
+        "Provide supplier traceability link."
+      ],
+      "flags": ["Incomplete process transparency"]
+    }
+  },
+  {
+    "id": 10,
+    "productName": "GlowPure Sunscreen SPF 50",
+    "category": "Personal Care",
+    "score": 84,
+    "status": "Reviewed",
+    "aiResponse": {
+      "explanation": "High transparency. Tested and certified, but some UV filter data missing.",
+      "suggestions": [
+        "List UV filters with chemical names.",
+        "Add dermatologist test certification."
+      ],
+      "flags": ["Missing UV ingredient details"]
+    }
+  }
+]
