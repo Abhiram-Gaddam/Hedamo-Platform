@@ -2,7 +2,7 @@
 
 This project is a **modern, responsive React web app** built with **Vite**, **Tailwind CSS**, and **Zustand** for state management. It features **AI-driven transparency scoring**, **live global search**, **multi-step product submission**, **real-time analytics**, and **full dark mode support**.
 
-Live Demo: [https://hedamo.vercel.app](https://hedamo-platform-1.vercel.app/)   
+Live Demo: [https://hedamo-platform-1.vercel.app/](https://hedamo-platform-1.vercel.app/)   
 
 ## Key Features
 
