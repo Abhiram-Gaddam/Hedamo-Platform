@@ -24,11 +24,9 @@ export default function ProductTable() {
   useEffect(() => {
     if (!rowRefs.current) return;
   
-    // Convert NodeList to an array to use GSAP utilities
-    const rows = gsap.utils.toArray(rowRefs.current);
+     const rows = gsap.utils.toArray(rowRefs.current);
   
-    // Clear any previous animations before running new ones
-    gsap.killTweensOf(rows);
+     gsap.killTweensOf(rows);
   
     gsap.fromTo(
       rows,

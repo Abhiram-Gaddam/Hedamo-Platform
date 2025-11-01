@@ -1,350 +1,4 @@
-// // src/components/ProductView.jsx
-// import { useState, useEffect, useRef, useMemo } from 'react';
-// import { useNavigate } from 'react-router-dom';
-// import { Grid3X3, Table, Eye, Filter, X, ChevronUp, ChevronDown, RotateCcw } from 'lucide-react';
-// import { useProductStore } from '../store/productStore';
-// import RadialChart from './RadialChart';
-
-// const statusColors = {
-//   Reviewed: 'bg-success/10 text-success',
-//   Pending: 'bg-warning/10 text-warning',
-//   Flagged: 'bg-danger/10 text-danger',
-// };
-
-// export default function ProductView() {
-//   const { products } = useProductStore();
-//   const [viewMode, setViewMode] = useState('table');
-//   const [searchTerm, setSearchTerm] = useState('');
-//   const [scoreRange, setScoreRange] = useState([0, 100]);
-//   const [selectedStatus, setSelectedStatus] = useState('all');
-//   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
-//   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
-//   const popupRef = useRef(null);
-//   const navigate = useNavigate();
-
-//   // === OPTIMIZED: NO GSAP ON LIST ===
-//   const processedProducts = useMemo(() => {
-//     let filtered = products.filter(product => {
-//       const matchesName = product.productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-//                          product.category.toLowerCase().includes(searchTerm.toLowerCase());
-//       const matchesScore = product.score >= scoreRange[0] && product.score <= scoreRange[1];
-//       const matchesStatus = selectedStatus === 'all' || product.status === selectedStatus;
-//       return matchesName && matchesScore && matchesStatus;
-//     });
-
-//     if (sortConfig.key) {
-//       filtered.sort((a, b) => {
-//         let aVal = a[sortConfig.key];
-//         let bVal = b[sortConfig.key];
-//         if (sortConfig.key === 'productName') {
-//           aVal = aVal.toLowerCase();
-//           bVal = bVal.toLowerCase();
-//         }
-//         if (aVal < bVal) return sortConfig.direction === 'asc' ? -1 : 1;
-//         if (aVal > bVal) return sortConfig.direction === 'asc' ? 1 : -1;
-//         return 0;
-//       });
-//     }
-//     return filtered;
-//   }, [products, searchTerm, scoreRange, selectedStatus, sortConfig]);
-
-//   // === POPUP ANIMATION ONLY ===
-//   useEffect(() => {
-//     if (!popupRef.current || !showAdvancedFilters) return;
-//     const el = popupRef.current;
-//     el.style.opacity = '0';
-//     el.style.transform = 'scale(0.9) translateY(-20px)';
-//     const timer = setTimeout(() => {
-//       el.style.transition = 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
-//       el.style.opacity = '1';
-//       el.style.transform = 'scale(1) translateY(0)';
-//     }, 10);
-//     return () => clearTimeout(timer);
-//   }, [showAdvancedFilters]);
-
-//   const handleSort = (key) => {
-//     setSortConfig(prev => ({
-//       key,
-//       direction: prev.key === key && prev.direction === 'asc' ? 'desc' : 'asc'
-//     }));
-//   };
-
-//   const resetFilters = () => {
-//     setSearchTerm('');
-//     setScoreRange([0, 100]);
-//     setSelectedStatus('all');
-//     setSortConfig({ key: null, direction: 'asc' });
-//   };
-
-//   const getScoreColor = (score) => {
-//     if (score >= 80) return 'text-success';
-//     if (score >= 50) return 'text-warning';
-//     return 'text-danger';
-//   };
-
-//   const SortIcon = ({ column }) => {
-//     if (sortConfig.key !== column) return <ChevronUp className="w-4 h-4 opacity-30" />;
-//     return sortConfig.direction === 'asc'
-//       ? <ChevronUp className="w-4 h-4 text-primary" />
-//       : <ChevronDown className="w-4 h-4 text-primary" />;
-//   };
-
-//   return (
-//     <div className="w-full">
-//       {/* HEADER */}
-//       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-//         <div className="flex items-center gap-3">
-//           <button
-//             onClick={() => setShowAdvancedFilters(true)}
-//             className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-xl hover:bg-primary/90 transition-all font-medium shadow-sm"
-//           >
-//             <Filter className="w-4 h-4" />
-//             Filters
-//           </button>
-//           {(searchTerm || scoreRange[0] > 0 || scoreRange[1] < 100 || selectedStatus !== 'all' || sortConfig.key) && (
-//             <button
-//               onClick={resetFilters}
-//               className="flex items-center gap-1 text-sm text-text-muted hover:text-primary"
-//             >
-//               <RotateCcw className="w-4 h-4" />
-//               Reset
-//             </button>
-//           )}
-//         </div>
-
-//         <div className="inline-flex rounded-xl bg-gray-100 dark:bg-gray-800 p-1">
-//           <button
-//             onClick={() => setViewMode('table')}
-//             className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all ${
-//               viewMode === 'table' ? 'bg-white dark:bg-dark-bg text-primary shadow-sm' : 'text-text-muted hover:text-text-primary'
-//             }`}
-//           >
-//             <Table className="w-4 h-4" /> Table
-//           </button>
-//           <button
-//             onClick={() => setViewMode('grid')}
-//             className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all ${
-//               viewMode === 'grid' ? 'bg-white dark:bg-dark-bg text-primary shadow-sm' : 'text-text-muted hover:text-text-primary'
-//             }`}
-//           >
-//             <Grid3X3 className="w-4 h-4" /> Grid
-//           </button>
-//         </div>
-//       </div>
-
-//       {/* TABLE VIEW — MOBILE FRIENDLY */}
-//             {/* TABLE VIEW — FULLY RESPONSIVE */}
-// {viewMode === 'table' && (
-//   <div className="bg-white dark:bg-dark-bg rounded-2xl shadow-card overflow-hidden">
-//     {/* Responsive scroll container */}
-//     <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-transparent">
-//       <table className="w-full min-w-[600px] border-collapse">
-//         {/* Sticky Header */}
-//         <thead className="bg-gray-50 dark:bg-gray-900 sticky top-0 z-10">
-//           <tr className="border-b border-gray-200 dark:border-gray-700">
-//             <th className="text-left p-3 sm:p-4 font-medium text-text-muted whitespace-nowrap">
-//               <button onClick={() => handleSort('productName')} className="flex items-center gap-1 hover:text-primary">
-//                 Name <SortIcon column="productName" />
-//               </button>
-//             </th>
-//             <th className="text-left p-3 sm:p-4 font-medium text-text-muted whitespace-nowrap">
-//               <button onClick={() => handleSort('score')} className="flex items-center gap-1 hover:text-primary">
-//                 Score <SortIcon column="score" />
-//               </button>
-//             </th>
-//             <th className="text-left p-3 sm:p-4 font-medium text-text-muted whitespace-nowrap">
-//               <button onClick={() => handleSort('status')} className="flex items-center gap-1 hover:text-primary">
-//                 Status <SortIcon column="status" />
-//               </button>
-//             </th>
-//             <th className="text-left p-3 sm:p-4 font-medium text-text-muted whitespace-nowrap">Actions</th>
-//           </tr>
-//         </thead>
-
-//         {/* Table Body */}
-//         <tbody>
-//           {processedProducts.length === 0 ? (
-//             <tr>
-//               <td colSpan="4" className="p-10 text-center text-text-muted">
-//                 <div className="flex flex-col items-center gap-2">
-//                   <Filter className="w-8 h-8 opacity-30" />
-//                   <p>No products match your filters.</p>
-//                 </div>
-//               </td>
-//             </tr>
-//           ) : (
-//             processedProducts.map((product) => (
-//               <tr
-//                 key={product.id}
-//                 className="border-b border-gray-100 dark:border-gray-800 hover:bg-primary/5 dark:hover:bg-primary/10 transition-all"
-//               >
-//                 <td className="p-3 sm:p-4">
-//                   <div>
-//                     <p className="font-medium text-text-primary dark:text-white truncate max-w-[160px] sm:max-w-[220px]">
-//                       {product.productName}
-//                     </p>
-//                     <p className="text-xs sm:text-sm text-text-muted">{product.category}</p>
-//                   </div>
-//                 </td>
-//                 <td className="p-3 sm:p-4">
-//                   <span className={`text-base sm:text-lg font-semibold ${getScoreColor(product.score)}`}>
-//                     {product.score}
-//                   </span>
-//                 </td>
-//                 <td className="p-3 sm:p-4">
-//                   <span
-//                     className={`px-2 py-1 rounded-full text-xs font-medium ${statusColors[product.status]} whitespace-nowrap`}
-//                   >
-//                     {product.status}
-//                   </span>
-//                 </td>
-//                 <td className="p-3 sm:p-4">
-//                   <button
-//                     onClick={() => navigate(`/product/${product.id}`)}
-//                     className="flex items-center gap-2 px-3 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 text-xs sm:text-sm font-medium"
-//                   >
-//                     <Eye className="w-4 h-4" /> View
-//                   </button>
-//                 </td>
-//               </tr>
-//             ))
-//           )}
-//         </tbody>
-//       </table>
-//     </div>
-//   </div>
-// )}
-
-//       {/* GRID VIEW */}
-//       {viewMode === 'grid' && (
-//         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-//           {processedProducts.length === 0 ? (
-//             <div className="col-span-full p-16 text-center text-text-muted">
-//               <div className="flex flex-col items-center gap-3">
-//                 <Filter className="w-10 h-10 opacity-30" />
-//                 <p>No products match your filters.</p>
-//               </div>
-//             </div>
-//           ) : (
-//             processedProducts.map((product) => (
-//               <div
-//                 key={product.id}
-//                 className="bg-white dark:bg-dark-bg rounded-2xl shadow-card hover:shadow-card-hover p-6 transition-all duration-300 group cursor-pointer"
-//                 onClick={() => navigate(`/product/${product.id}`)}
-//               >
-//                 <div className="flex items-start justify-between mb-4">
-//                   <div>
-//                     <h3 className="font-semibold text-text-primary dark:text-white text-lg">{product.productName}</h3>
-//                     <p className="text-sm text-text-muted">{product.category}</p>
-//                   </div>
-//                   <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusColors[product.status]}`}>
-//                     {product.status}
-//                   </span>
-//                 </div>
-//                 <div className="flex items-center justify-between">
-//                   <div className="w-20 h-20">
-//                     <RadialChart score={product.score} size={80} />
-//                   </div>
-//                   <button className="p-3 bg-primary/10 rounded-xl group-hover:bg-primary group-hover:text-white transition-all">
-//                     <Eye className="w-5 h-5" />
-//                   </button>
-//                 </div>
-//               </div>
-//             ))
-//           )}
-//         </div>
-//       )}
-
-//       {/* FILTER POPUP */}
-//       {showAdvancedFilters && (
-//         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setShowAdvancedFilters(false)}>
-//           <div
-//             ref={popupRef}
-//             className="bg-white dark:bg-dark-bg rounded-2xl shadow-2xl p-8 max-w-md w-full"
-//             onClick={(e) => e.stopPropagation()}
-//           >
-//             <div className="flex justify-between items-center mb-6">
-//               <h2 className="text-2xl font-bold text-text-primary dark:text-white">Advanced Filters</h2>
-//               <button
-//                 onClick={() => setShowAdvancedFilters(false)}
-//                 className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
-//               >
-//                 <X className="w-5 h-5" />
-//               </button>
-//             </div>
-
-//             <div className="space-y-5">
-//               <div>
-//                 <label className="block text-sm font-medium text-text-primary dark:text-white mb-2">Search</label>
-//                 <input
-//                   type="text"
-//                   value={searchTerm}
-//                   onChange={(e) => setSearchTerm(e.target.value)}
-//                   placeholder="Name or category..."
-//                   className="w-full px-4 py-3 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 focus:ring-2 focus:ring-primary"
-//                 />
-//               </div>
-
-//               <div>
-//                 <label className="block text-sm font-medium text-text-primary dark:text-white mb-2">Score Range</label>
-//                 <div className="flex items-center gap-3">
-//                   <input
-//                     type="number"
-//                     min="0"
-//                     max="100"
-//                     value={scoreRange[0]}
-//                     onChange={(e) => setScoreRange([Number(e.target.value), scoreRange[1]])}
-//                     className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg"
-//                   />
-//                   <span>—</span>
-//                   <input
-//                     type="number"
-//                     min="0"
-//                     max="100"
-//                     value={scoreRange[1]}
-//                     onChange={(e) => setScoreRange([scoreRange[0], Number(e.target.value)])}
-//                     className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg"
-//                   />
-//                 </div>
-//               </div>
-
-//               <div>
-//                 <label className="block text-sm font-medium text-text-primary dark:text-white mb-2">Status</label>
-//                 <select
-//                   value={selectedStatus}
-//                   onChange={(e) => setSelectedStatus(e.target.value)}
-//                   className="w-full px-4 py-3 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 focus:ring-2 focus:ring-primary"
-//                 >
-//                   <option value="all">All Status</option>
-//                   <option value="Reviewed">Reviewed</option>
-//                   <option value="Pending">Pending</option>
-//                   <option value="Flagged">Flagged</option>
-//                 </select>
-//               </div>
-
-//               <div className="flex gap-3 pt-4">
-//                 <button
-//                   onClick={resetFilters}
-//                   className="flex-1 py-3 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800"
-//                 >
-//                   Reset
-//                 </button>
-//                 <button
-//                   onClick={() => setShowAdvancedFilters(false)}
-//                   className="flex-1 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 font-medium"
-//                 >
-//                   Apply
-//                 </button>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-//       )}
-//     </div>
-//   );
-// }
-// src/components/ProductView.jsx 
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Grid3X3,
@@ -355,52 +9,37 @@ import {
   ChevronUp,
   ChevronDown,
   RotateCcw,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react';
 import { useProductStore } from '../store/productStore';
 import RadialChart from './RadialChart';
 
 const statusColors = {
-  Reviewed: 'bg-success/10 text-success',
-  Pending: 'bg-warning/10 text-warning',
-  Flagged: 'bg-danger/10 text-danger',
+  Reviewed: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400',
+  Pending: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400',
+  Flagged: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
 };
+
+const ITEMS_PER_PAGE = 6;
 
 export default function ProductView() {
   const { products } = useProductStore();
-  const [desktopViewMode, setDesktopViewMode] = useState('table');
+  const [viewMode, setViewMode] = useState('table');
   const [searchTerm, setSearchTerm] = useState('');
   const [scoreRange, setScoreRange] = useState([0, 100]);
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
-  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const popupRef = useRef(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [showFilters, setShowFilters] = useState(false);
   const navigate = useNavigate();
 
-  // Detect screen size
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768); // 768px is md breakpoint
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  // Actual view mode (force grid on mobile)
-  const viewMode = isMobile ? 'grid' : desktopViewMode;
-
-  // === Filtering & Sorting ===
-  const processedProducts = useMemo(() => {
-    let filtered = products.filter((product) => {
-      const matchesName =
-        product.productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.category.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesScore =
-        product.score >= scoreRange[0] && product.score <= scoreRange[1];
-      const matchesStatus =
-        selectedStatus === 'all' || product.status === selectedStatus;
+   const processedProducts = useMemo(() => {
+    let filtered = products.filter(p => {
+      const matchesName = p.productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         p.category.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesScore = p.score >= scoreRange[0] && p.score <= scoreRange[1];
+      const matchesStatus = selectedStatus === 'all' || p.status === selectedStatus;
       return matchesName && matchesScore && matchesStatus;
     });
 
@@ -412,34 +51,29 @@ export default function ProductView() {
           aVal = aVal.toLowerCase();
           bVal = bVal.toLowerCase();
         }
-        if (aVal < bVal) return sortConfig.direction === 'asc' ? -1 : 1;
-        if (aVal > bVal) return sortConfig.direction === 'asc' ? 1 : -1;
-        return 0;
+        return sortConfig.direction === 'asc'
+          ? (aVal < bVal ? -1 : 1)
+          : (aVal > bVal ? -1 : 1);
       });
     }
+
     return filtered;
   }, [products, searchTerm, scoreRange, selectedStatus, sortConfig]);
 
-  // === Popup Animation ===
-  useEffect(() => {
-    if (!popupRef.current || !showAdvancedFilters) return;
-    const el = popupRef.current;
-    el.style.opacity = '0';
-    el.style.transform = 'scale(0.9) translateY(-20px)';
-    const timer = setTimeout(() => {
-      el.style.transition =
-        'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
-      el.style.opacity = '1';
-      el.style.transform = 'scale(1) translateY(0)';
-    }, 10);
-    return () => clearTimeout(timer);
-  }, [showAdvancedFilters]);
+  const totalPages = Math.ceil(processedProducts.length / ITEMS_PER_PAGE);
+  const paginatedProducts = processedProducts.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
+   useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, scoreRange, selectedStatus, sortConfig]);
 
   const handleSort = (key) => {
-    setSortConfig((prev) => ({
+    setSortConfig(prev => ({
       key,
-      direction:
-        prev.key === key && prev.direction === 'asc' ? 'desc' : 'asc',
+      direction: prev.key === key && prev.direction === 'asc' ? 'desc' : 'asc'
     }));
   };
 
@@ -451,159 +85,109 @@ export default function ProductView() {
   };
 
   const getScoreColor = (score) => {
-    if (score >= 80) return 'text-success';
-    if (score >= 50) return 'text-warning';
-    return 'text-danger';
+    if (score >= 80) return 'text-emerald-600 dark:text-emerald-400';
+    if (score >= 50) return 'text-amber-600 dark:text-amber-400';
+    return 'text-red-600 dark:text-red-400';
   };
 
   const SortIcon = ({ column }) => {
-    if (sortConfig.key !== column)
-      return <ChevronUp className="w-4 h-4 opacity-30" />;
-    return sortConfig.direction === 'asc' ? (
-      <ChevronUp className="w-4 h-4 text-primary" />
-    ) : (
-      <ChevronDown className="w-4 h-4 text-primary" />
-    );
+    if (sortConfig.key !== column) return <ChevronUp className="w-4 h-4 opacity-30" />;
+    return sortConfig.direction === 'asc'
+      ? <ChevronUp className="w-4 h-4 text-primary" />
+      : <ChevronDown className="w-4 h-4 text-primary" />;
   };
 
   return (
     <div className="w-full">
-      {/* HEADER */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <div className="flex items-center gap-3">
           <button
-            onClick={() => setShowAdvancedFilters(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-xl hover:bg-primary/90 transition-all font-medium shadow-sm text-sm"
+            onClick={() => setShowFilters(true)}
+            className="flex items-center gap-2 px-4 py-2.5 bg-primary text-white rounded-xl hover:bg-primary/90 transition-all text-sm font-medium"
           >
             <Filter className="w-4 h-4" />
             Filters
           </button>
-          {(searchTerm ||
-            scoreRange[0] > 0 ||
-            scoreRange[1] < 100 ||
-            selectedStatus !== 'all' ||
-            sortConfig.key) && (
-            <button
-              onClick={resetFilters}
-              className="flex items-center gap-1 text-sm text-text-muted hover:text-primary"
-            >
+          {(searchTerm || scoreRange[0] > 0 || scoreRange[1] < 100 || selectedStatus !== 'all') && (
+            <button onClick={resetFilters} className="flex items-center gap-1 text-sm text-text-muted hover:text-primary">
               <RotateCcw className="w-4 h-4" />
               Reset
             </button>
           )}
         </div>
 
-        {/* View Toggle - Only show on desktop */}
-        {!isMobile && (
-          <div className="inline-flex rounded-xl bg-gray-100 dark:bg-gray-800 p-1">
-            <button
-              onClick={() => setDesktopViewMode('table')}
-              className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all ${
-                desktopViewMode === 'table'
-                  ? 'bg-white dark:bg-dark-bg text-primary shadow-sm'
-                  : 'text-text-muted hover:text-text-primary'
-              }`}
-            >
-              <Table className="w-4 h-4" /> Table
-            </button>
-            <button
-              onClick={() => setDesktopViewMode('grid')}
-              className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all ${
-                desktopViewMode === 'grid'
-                  ? 'bg-white dark:bg-dark-bg text-primary shadow-sm'
-                  : 'text-text-muted hover:text-text-primary'
-              }`}
-            >
-              <Grid3X3 className="w-4 h-4" /> Grid
-            </button>
-          </div>
-        )}
+        <div className="inline-flex rounded-xl bg-gray-100 dark:bg-gray-800 p-1">
+          <button
+            onClick={() => setViewMode('table')}
+            className={`px-3 py-2 rounded-lg flex items-center gap-2 text-sm transition-all ${
+              viewMode === 'table' ? 'bg-white dark:bg-gray-700 text-primary shadow-sm' : 'text-text-muted'
+            }`}
+          >
+            <Table className="w-4 h-4" /> Table
+          </button>
+          <button
+            onClick={() => setViewMode('grid')}
+            className={`px-3 py-2 rounded-lg flex items-center gap-2 text-sm transition-all ${
+              viewMode === 'grid' ? 'bg-white dark:bg-gray-700 text-primary shadow-sm' : 'text-text-muted'
+            }`}
+          >
+            <Grid3X3 className="w-4 h-4" /> Grid
+          </button>
+        </div>
       </div>
 
-      {/* TABLE VIEW — Desktop Only */}
-      {viewMode === 'table' && (
-        <div className="bg-white dark:bg-dark-bg rounded-2xl shadow-card overflow-hidden">
+       {viewMode === 'table' && (
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full">
+            <table className="w-full min-w-[600px]">
               <thead className="bg-gray-50 dark:bg-gray-900">
                 <tr className="border-b border-gray-200 dark:border-gray-700">
-                  <th className="text-left px-4 py-4 font-medium text-text-muted whitespace-nowrap">
-                    <button
-                      onClick={() => handleSort('productName')}
-                      className="flex items-center gap-1 hover:text-primary transition-colors"
-                    >
+                  <th className="text-left p-4 font-medium text-text-muted">
+                    <button onClick={() => handleSort('productName')} className="flex items-center gap-1 hover:text-primary">
                       Name <SortIcon column="productName" />
                     </button>
                   </th>
-                  <th className="text-left px-4 py-4 font-medium text-text-muted whitespace-nowrap">
-                    <button
-                      onClick={() => handleSort('score')}
-                      className="flex items-center gap-1 hover:text-primary transition-colors"
-                    >
+                  <th className="text-left p-4 font-medium text-text-muted">
+                    <button onClick={() => handleSort('score')} className="flex items-center gap-1 hover:text-primary">
                       Score <SortIcon column="score" />
                     </button>
                   </th>
-                  <th className="text-left px-4 py-4 font-medium text-text-muted whitespace-nowrap">
-                    <button
-                      onClick={() => handleSort('status')}
-                      className="flex items-center gap-1 hover:text-primary transition-colors"
-                    >
+                  <th className="text-left p-4 font-medium text-text-muted">
+                    <button onClick={() => handleSort('status')} className="flex items-center gap-1 hover:text-primary">
                       Status <SortIcon column="status" />
                     </button>
                   </th>
-                  <th className="text-left px-4 py-4 font-medium text-text-muted whitespace-nowrap">
-                    Actions
-                  </th>
+                  <th className="text-left p-4 font-medium text-text-muted">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {processedProducts.length === 0 ? (
+                {paginatedProducts.length === 0 ? (
                   <tr>
-                    <td
-                      colSpan="4"
-                      className="p-10 text-center text-text-muted"
-                    >
-                      <div className="flex flex-col items-center gap-2">
-                        <Filter className="w-8 h-8 opacity-30" />
+                    <td colSpan="4" className="p-16 text-center text-text-muted">
+                      <div className="flex flex-col items-center gap-3">
+                        <Filter className="w-10 h-10 opacity-30" />
                         <p>No products match your filters.</p>
                       </div>
                     </td>
                   </tr>
                 ) : (
-                  processedProducts.map((product) => (
-                    <tr
-                      key={product.id}
-                      className="border-b border-gray-100 dark:border-gray-800 hover:bg-primary/5 dark:hover:bg-primary/10 transition-colors"
-                    >
-                      <td className="px-4 py-4">
+                  paginatedProducts.map(product => (
+                    <tr key={product.id} className="border-b border-gray-100 dark:border-gray-700 hover:bg-primary/5 dark:hover:bg-primary/10">
+                      <td className="p-4">
                         <div>
-                          <p className="font-medium text-text-primary dark:text-white">
-                            {product.productName}
-                          </p>
-                          <p className="text-sm text-text-muted">
-                            {product.category}
-                          </p>
+                          <p className="font-medium text-text-primary dark:text-white truncate max-w-[180px]">{product.productName}</p>
+                          <p className="text-sm text-text-muted">{product.category}</p>
                         </div>
                       </td>
-                      <td className="px-4 py-4">
-                        <span
-                          className={`text-lg font-semibold ${getScoreColor(
-                            product.score
-                          )}`}
-                        >
-                          {product.score}
-                        </span>
+                      <td className="p-4">
+                        <span className={`text-lg font-bold ${getScoreColor(product.score)}`}>{product.score}</span>
                       </td>
-                      <td className="px-4 py-4">
-                        <span
-                          className={`px-3 py-1 rounded-full text-xs font-medium ${
-                            statusColors[product.status]
-                          } whitespace-nowrap`}
-                        >
+                      <td className="p-4">
+                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusColors[product.status]}`}>
                           {product.status}
                         </span>
                       </td>
-                      <td className="px-4 py-4">
+                      <td className="p-4">
                         <button
                           onClick={() => navigate(`/product/${product.id}`)}
                           className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 text-sm font-medium"
@@ -617,158 +201,163 @@ export default function ProductView() {
               </tbody>
             </table>
           </div>
-        </div>
-      )}
 
-      {/* GRID VIEW — Mobile & Desktop */}
-      {viewMode === 'grid' && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          {processedProducts.length === 0 ? (
-            <div className="col-span-full p-12 sm:p-16 text-center text-text-muted">
-              <div className="flex flex-col items-center gap-3">
-                <Filter className="w-10 h-10 opacity-30" />
-                <p>No products match your filters.</p>
+           {totalPages > 1 && (
+            <div className="flex items-center justify-between px-4 py-3 border-t border-gray-200 dark:border-gray-700">
+              <p className="text-sm text-text-muted">
+                Page {currentPage} of {totalPages} ({processedProducts.length} items)
+              </p>
+              <div className="flex gap-1">
+                <button
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                  className="p-2 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+                {[...Array(totalPages)].map((_, i) => (
+                  <button
+                    key={i + 1}
+                    onClick={() => setCurrentPage(i + 1)}
+                    className={`px-3 py-1 rounded-lg dark:text-white text-sm font-medium transition-all ${
+                      currentPage === i + 1
+                        ? 'bg-primary text-white'
+                        : 'hover:bg-gray-100 dark:hover:bg-gray-700'
+                    }`}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+                <button
+                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                  disabled={currentPage === totalPages}
+                  className="p-2 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
               </div>
             </div>
-          ) : (
-            processedProducts.map((product) => (
-              <div
-                key={product.id}
-                className="bg-white dark:bg-dark-bg rounded-2xl shadow-card hover:shadow-card-hover p-6 transition-all duration-300 group cursor-pointer"
-                onClick={() => navigate(`/product/${product.id}`)}
-              >
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex-1 min-w-0 pr-3">
-                    <h3 className="font-semibold text-text-primary dark:text-white text-lg truncate">
-                      {product.productName}
-                    </h3>
-                    <p className="text-sm text-text-muted truncate">
-                      {product.category}
-                    </p>
-                  </div>
-                  <span
-                    className={`flex-shrink-0 px-3 py-1 rounded-full text-xs font-medium ${statusColors[product.status]}`}
-                  >
-                    {product.status}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="w-20 h-20">
-                    <RadialChart score={product.score} size={80} />
-                  </div>
-                  <button className="p-3 bg-primary/10 rounded-xl group-hover:bg-primary group-hover:text-white transition-all">
-                    <Eye className="w-5 h-5" />
-                  </button>
-                </div>
-              </div>
-            ))
           )}
         </div>
       )}
 
-      {/* FILTER POPUP */}
-      {showAdvancedFilters && (
-        <div
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-          onClick={() => setShowAdvancedFilters(false)}
-        >
-          <div
-            ref={popupRef}
-            className="bg-white dark:bg-dark-bg rounded-2xl shadow-2xl p-6 sm:p-8 max-w-md w-full max-h-[90vh] overflow-y-auto"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl sm:text-2xl font-bold text-text-primary dark:text-white">
-                Advanced Filters
-              </h2>
+       {viewMode === 'grid' && (
+        <div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {paginatedProducts.length === 0 ? (
+              <div className="col-span-full p-16 text-center text-text-muted">
+                <Filter className="w-10 h-10 mx-auto mb-3 opacity-30" />
+                <p>No products found.</p>
+              </div>
+            ) : (
+              paginatedProducts.map(product => (
+                <div
+                  key={product.id}
+                  onClick={() => navigate(`/product/${product.id}`)}
+                  className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-md p-5 cursor-pointer transition-all"
+                >
+                  <div className="flex justify-between items-start mb-3">
+                    <div className="flex-1 min-w-0 pr-2">
+                      <h3 className="font-semibold text-text-primary dark:text-white truncate">{product.productName}</h3>
+                      <p className="text-sm text-text-muted truncate">{product.category}</p>
+                    </div>
+                    <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${statusColors[product.status]}`}>
+                      {product.status}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="w-16 h-16">
+                      <RadialChart score={product.score} size={64} />
+                    </div>
+                    <div className="text-right">
+                      <p className={`text-2xl font-bold ${getScoreColor(product.score)}`}>{product.score}</p>
+                      <p className="text-xs text-text-muted">Score</p>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+
+           {totalPages > 1 && (
+            <div className="flex items-center justify-center gap-2 mt-6">
               <button
-                onClick={() => setShowAdvancedFilters(false)}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className="p-2 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50"
               >
-                <X className="w-5 h-5" />
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              {[...Array(totalPages)].map((_, i) => (
+                <button
+                  key={i + 1}
+                  onClick={() => setCurrentPage(i + 1)}
+                  className={`px-3 py-1 rounded-lg dark:text-white text-sm font-medium transition-all ${
+                    currentPage === i + 1
+                      ? 'bg-primary text-white'
+                      : 'hover:bg-gray-100 dark:hover:bg-gray-700'
+                  }`}
+                >
+                  {i + 1}
+                </button>
+              ))}
+              <button
+                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                disabled={currentPage === totalPages}
+                className="p-2 rounded-lg hover:bg-gray-100 dark:text-white  dark:hover:bg-gray-700 disabled:opacity-50"
+              >
+                <ChevronRight className="w-5 h-5" />
               </button>
             </div>
+          )}
+        </div>
+      )}
 
-            <div className="space-y-5">
-              <div>
-                <label className="block text-sm font-medium text-text-primary dark:text-white mb-2">
-                  Search
-                </label>
+       {showFilters && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setShowFilters(false)}>
+          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-sm w-full" onClick={e => e.stopPropagation()}>
+            <div className="flex justify-between items-center mb-5">
+              <h2 className="text-xl font-bold">Filters</h2>
+              <button onClick={() => setShowFilters(false)}><X className="w-5 h-5" /></button>
+            </div>
+            <div className="space-y-4">
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchTerm}
+                onChange={e => setSearchTerm(e.target.value)}
+                className="w-full px-4 py-2.5 border rounded-lg dark:bg-gray-700 dark:border-gray-600"
+              />
+              <div className="flex gap-2">
                 <input
-                  type="text"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder="Name or category..."
-                  className="w-full px-4 py-3 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-text-primary dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
+                  type="number"
+                  min="0" max="100"
+                  value={scoreRange[0]}
+                  onChange={e => setScoreRange([+e.target.value, scoreRange[1]])}
+                  className="w-full px-3 py-2 border rounded-lg dark:bg-gray-700"
+                />
+                <span className="self-center">—</span>
+                <input
+                  type="number"
+                  min="0" max="100"
+                  value={scoreRange[1]}
+                  onChange={e => setScoreRange([scoreRange[0], +e.target.value])}
+                  className="w-full px-3 py-2 border rounded-lg dark:bg-gray-700"
                 />
               </div>
-
-              <div>
-                <label className="block text-sm font-medium text-text-primary dark:text-white mb-2">
-                  Score Range
-                </label>
-                <div className="flex items-center gap-3">
-                  <input
-                    type="number"
-                    min="0"
-                    max="100"
-                    value={scoreRange[0]}
-                    onChange={(e) =>
-                      setScoreRange([
-                        Number(e.target.value),
-                        scoreRange[1],
-                      ])
-                    }
-                    className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-text-primary dark:text-white focus:ring-2 focus:ring-primary outline-none"
-                  />
-                  <span className="text-text-muted">—</span>
-                  <input
-                    type="number"
-                    min="0"
-                    max="100"
-                    value={scoreRange[1]}
-                    onChange={(e) =>
-                      setScoreRange([
-                        scoreRange[0],
-                        Number(e.target.value),
-                      ])
-                    }
-                    className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-text-primary dark:text-white focus:ring-2 focus:ring-primary outline-none"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-text-primary dark:text-white mb-2">
-                  Status
-                </label>
-                <select
-                  value={selectedStatus}
-                  onChange={(e) =>
-                    setSelectedStatus(e.target.value)
-                  }
-                  className="w-full px-4 py-3 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-text-primary dark:text-white focus:ring-2 focus:ring-primary outline-none"
-                >
-                  <option value="all">All Status</option>
-                  <option value="Reviewed">Reviewed</option>
-                  <option value="Pending">Pending</option>
-                  <option value="Flagged">Flagged</option>
-                </select>
-              </div>
-
-              <div className="flex gap-3 pt-4">
-                <button
-                  onClick={resetFilters}
-                  className="flex-1 py-3 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 font-medium transition-colors"
-                >
-                  Reset
-                </button>
-                <button
-                  onClick={() => setShowAdvancedFilters(false)}
-                  className="flex-1 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 font-medium transition-colors"
-                >
-                  Apply
-                </button>
+              <select
+                value={selectedStatus}
+                onChange={e => setSelectedStatus(e.target.value)}
+                className="w-full px-4 py-2.5 border rounded-lg dark:bg-gray-700"
+              >
+                <option value="all">All Status</option>
+                <option value="Reviewed">Reviewed</option>
+                <option value="Pending">Pending</option>
+                <option value="Flagged">Flagged</option>
+              </select>
+              <div className="flex gap-2">
+                <button onClick={resetFilters} className="flex-1 py-2.5 border rounded-lg">Reset</button>
+                <button onClick={() => setShowFilters(false)} className="flex-1 py-2.5 bg-primary text-white rounded-lg">Apply</button>
               </div>
             </div>
           </div>

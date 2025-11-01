@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 
-const circumference = 2 * Math.PI * 70; // r = 70
+const circumference = 2 * Math.PI * 70;  
 
 export default function RadialChart({ score = 0, size = 160 }) {
   const circleRef = useRef(null);
